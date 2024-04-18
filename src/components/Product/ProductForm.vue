@@ -11,7 +11,7 @@
             <div class="message text-danger">
                 <p>{{ message }}</p>
             </div>
-            <img v-if="productImageUrl" :src="productImageUrl" alt="" class="image-loaded"/>
+            <img v-if="imageUrl" :src="imageUrl" alt="" class="image-loaded"/>
         </div>
 
         <div class="form-group">
@@ -58,12 +58,6 @@
 import Btn from "@/components/Common/Btn.vue";
 
 export default {
-    props: {
-        product: {
-            type: Object,
-            default: null
-        }
-    },
     data() {
         return {
             _id: null,
@@ -77,27 +71,28 @@ export default {
             author: "Nguyễn Nhật Ánh",
             file: null,
             message: "",
-            productImageUrl: "",
-            imageId: "",
+            imageUrl: null,
+            imageId: null,
         }
     },
     components: {
         Btn,
     },
     created() {
-        if (this.product) {
-            this.name = this.product.name;
-            this.price = this.product.price;
-            this.quantity = this.product.quantity;
-            this.publishYear = this.product.publishYear;
-            this.publisherId = this.product.publisherId;
-            this.borrowingTime = this.product.borrowingTime;
-            this.description = this.product.description;
-            this.author = this.product.author;
-            this.productImageUrl = this.product.imageUrl;
-            this.imageId = this.product.imageId;
-            if (this.product._id) 
-                this._id = this.product._id;
+        if (this.$route.params.id) {
+            const product = JSON.parse(this.$route.query.data)
+            this.name = product.name;
+            this.price = product.price;
+            this.quantity = product.quantity;
+            this.publishYear = product.publishYear;
+            this.publisherId = product.publisherId._id;
+            this.borrowingTime = product.borrowingTime;
+            this.description = product.description;
+            this.author = product.author;
+            this.imageUrl = product.imageId.imageUrl;
+            this.imageId = product.imageId._id;
+            if (product._id) 
+                this._id = product._id;
         }
     },
     methods: {
@@ -105,7 +100,7 @@ export default {
             //reset
             this.message = ""
             this.file = null;
-            this.productImageUrl = "";
+            this.imageUrl = "";
 
             const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
             const file = this.$refs.file.files[0];
@@ -120,7 +115,7 @@ export default {
             }
             const theReader = new FileReader();
             theReader.onloadend = async () => {
-                this.productImageUrl = await theReader.result;
+                this.imageUrl = await theReader.result;
             };
             theReader.readAsDataURL(file);
         },
@@ -137,9 +132,6 @@ export default {
                 author: this.author,
                 imageId: this.imageId,
                 file: this.file,
-            }
-            if (this._id) {
-                data._id = this._id;
             }
             this.$emit("submit", data);
         },

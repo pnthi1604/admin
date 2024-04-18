@@ -2,9 +2,8 @@ import Home from "@/views/Home.vue";
 import Product from "@/views/Product.vue";
 import Publisher from "@/views/Publisher.vue";
 import Order from "@/views/Order.vue";
-import AddProduct from "@/views/AddProduct.vue";
-import Upload from "@/views/Upload.vue";
 import UpdateProduct from "@/views/UpdateProduct.vue";
+import Upload from "@/views/Upload.vue";
 import ProductDetai from "@/views/ProductDetail.vue";
 import UpdatePublisher from "@/views/UpdatePublisher.vue";
 
@@ -55,7 +54,7 @@ const routes = [
                     },
                     {
                         path: "add-product",
-                        component: AddProduct,
+                        component: UpdateProduct,
                         name: "addProductPage",
                         meta : {
                             requiresAuth: true,

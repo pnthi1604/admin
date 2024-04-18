@@ -30,15 +30,10 @@
 import Greeting from '@/components/Common/Greeting.vue';
 import productService from '@/services/product.service';
 import Btn from '@/components/Common/Btn.vue';
-import { mapStores } from 'pinia'
-import useProductStore from "@/stores/product.store"
 import ProductItem from '@/components/Product/ProductItem.vue';
 import InputSearch from '@/components/Common/InputSearch.vue';
 
 export default {
-    computed: {
-        ...mapStores(useProductStore),
-    },
     data() {
         return {
             title: 'Quản lý sản phẩm',
@@ -65,19 +60,19 @@ export default {
             if (!this.searchTerm || this.searchTerm == "")
                 this.filterProducts = this.products;
             else
-                this.filterProducts = this.productStore.searchProduct(this.searchTerm);
+                this.filterProducts = this.products.filter(product => {
+                    return product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        product.author.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        product.publisherId.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+                });
         },
         async getProducts() {
-            if (this.productStore.getProducts.length == 0) {
-                const res = await productService.getProducts();
-                if (res.status == "success") {
-                    await this.productStore.setProducts(res.data);
-                    this.products = this.productStore.getProducts;
-                } else {
-                    alert(res.message);
-                }
+            const res = await productService.getProducts();
+            if (res.status == "error") {
+                alert(res.message);
+                return
             }
-            this.products = this.productStore.getProducts
+            this.products = res.data;
             this.filterProducts = this.products;
         },
         addProduct() {
@@ -94,17 +89,17 @@ export default {
         },
         async deleteProduct(id) {
             const res = await productService.deleteProduct(id);
-            if (res.status == "success") {
-                this.productStore.deleteProduct(id);
-            } else {
-                alert(res.message);
-            }
+            if (res.status == "error")
+                alert(res.message)
         },
         handleShowDetail(product) {
             this.$router.push({
                 name: 'productDetailPage',
                 params: {
                     id: product._id
+                },
+                query: {
+                    data: JSON.stringify(product)
                 }
             });
         }

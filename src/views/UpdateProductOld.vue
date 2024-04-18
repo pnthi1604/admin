@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <title-form :title="title"></title-form>
-        <product-form @submit="handleSubmit"></product-form>
+        <product-form @submit="handleSubmit" :product="product"></product-form>
     </div>
 </template>
 
@@ -10,26 +10,29 @@ import ProductForm from "@/components/Product/ProductForm.vue";
 import TitleForm from "@/components/Common/TitleForm.vue";
 import productService from "@/services/product.service";
 import imageService from "@/services/image.service"
+import { mapStores } from 'pinia'
+import useProductStore from "@/stores/product.store.old"
 
 export default {
+    computed: {
+        ...mapStores(useProductStore)
+    },
     components: {
         ProductForm,
         TitleForm
     },
     data() {
         return {
-            title: "Thêm sản phẩm"
+            title: "Cập nhật sản phẩm",
+            product: null
         }
     },
     created() {
-        if (this.$route.params.id) {
-            this.title = "Cập nhật sản phẩm"
-        }
+        this.product = this.productStore.getProduct(this.$route.params.id)
     },
     methods: {
         async handleSubmit(data) {
-            const { file, ...productData } = data;
-            console.log({file})
+            const { file, imageUrl, publisher, ...productData } = data;
             if (file) {
                 const formData = new FormData();
                 formData.append("file", file);
@@ -38,25 +41,16 @@ export default {
                     alert(resImage.message)
                     return
                 }
+                // delete old image
+                await imageService.deleteImage(productData.imageId)
                 productData.imageId = resImage.data._id
             }
-
-            if (!productData.imageId) {
-                alert("Hình ảnh là bắt buộc!")
-                return
-            }
-
-            let resProduct = null
-            if (!this.$route.params.id) {
-                console.log({productData})  
-                resProduct = await productService.createProduct(productData)
-            } else {
-                resProduct = await productService.updateProduct(this.$route.params.id, productData)
-            }
-            alert(resProduct.message)
+            const resProduct = await productService.updateProduct(productData._id, productData)
             if (resProduct.status == "success") {
+                await this.productStore.updateProduct(resProduct.data)
                 this.$router.push({ name: "productPage" })
             }
+            alert(resProduct.message)
         }
     }
 }

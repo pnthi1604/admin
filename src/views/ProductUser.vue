@@ -14,7 +14,7 @@ import ProductCard from '@/components/Product/ProductDetail.vue';
 import productService from '@/services/product.service';
 import Btn from '@/components/Common/Btn.vue';
 import { mapStores } from 'pinia'
-import useProductStore from "@/stores/product.store"
+import useProductStore from "@/stores/product.store.old"
 
 export default {
     computed: {

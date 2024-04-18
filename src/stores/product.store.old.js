@@ -15,7 +15,6 @@ const productStore = defineStore('product', {
     actions: {
         renderImageUrl(image) {
             if (!image) return "@/assets/images/no-imag.jpg"
-            console.log(image.contentType, image.data)  
             return `data:${image.contentType};base64,${Buffer.from(image.data).toString("base64")}`
         },
         async handleProduct(product) {

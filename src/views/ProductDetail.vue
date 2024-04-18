@@ -9,21 +9,16 @@
 <script>
 import Greeting from '@/components/Common/Greeting.vue';
 import ProductDetail from '@/components/Product/ProductDetail.vue';
-import { mapStores } from 'pinia';
-import useProductStore from "@/stores/product.store";
 import Btn from "@/components/Common/Btn.vue";
 
 export default {
-    computed: {
-        ...mapStores(useProductStore)
-    },
     components: {
         Greeting,
         ProductDetail,
         Btn,
     },
     created() {
-        this.getProduct(this.$route.params.id);
+        this.product = JSON.parse(this.$route.query.data)
     },
     data() {
         return {
@@ -32,17 +27,14 @@ export default {
         }
     },
     methods: {
-        getProduct(id) {
-            this.product = this.productStore.getProduct(id);
-        },
         handleEdit() {
-            console.log({
-                "this.product": this.product,
-            });
             this.$router.push({
                 name: 'updateProductPage',
                 params: {
                     id: this.product._id
+                },
+                query: {
+                    data: JSON.stringify(this.product)
                 }
             });
         },

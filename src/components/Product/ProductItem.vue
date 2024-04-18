@@ -2,7 +2,7 @@
     <tr>
         <td>
             <div class="product">
-                <img :src="product.imageUrl" alt="Sản phẩm" width="100" height="100" class="product-img">
+                <img :src="product.imageId.imageUrl" alt="Sản phẩm" width="100" height="100" class="product-img">
                 <p class="product-name">
                     {{ shortForm(product.name) }}
                 </p>
@@ -16,12 +16,12 @@
         </td>
         <td>
             {{ product.borrowingTime }} ngày
-        </td>  
+        </td>
         <td>
             {{ product.author }}
         </td>
         <td>
-            {{ product.publisher }}
+            {{ product.publisherId.name }}
         </td>
         <td>
             <btn nameBtn="Xem" styleBtn="btn-primary" @click="handleShowDetail" class="btn-func"></btn>
@@ -56,11 +56,8 @@ export default {
             this.$emit('deleteProduct', this.product);
         },
         handleShowDetail() {
-            console.log({
-                "info product show": this.product,
-            })
             this.$emit('showDetail', this.product);
-        
+
         }
     }
 };
