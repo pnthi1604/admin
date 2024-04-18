@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import NavItem from "@/components/Utils/NavItem.vue";
+import NavItem from "@/components/Common/NavItem.vue";
 import useAuthStore from "@/stores/auth.store.js";
 import { mapStores } from "pinia";
 

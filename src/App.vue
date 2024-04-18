@@ -3,7 +3,7 @@
     <div class="container">
         <router-view></router-view>
     </div>
-    <app-footer class="app-footer"></app-footer>
+    <!-- <app-footer class="app-footer"></app-footer> -->
 </template>
 
 <script>

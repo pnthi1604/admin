@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <title-form :title="tilte"></title-form>
+        <title-form :title="title"></title-form>
         <product-form @submit="handleSubmit"></product-form>
     </div>
 </template>
@@ -9,8 +9,14 @@
 import ProductForm from "@/components/Product/ProductForm.vue";
 import TitleForm from "@/components/Common/TitleForm.vue";
 import productService from "@/services/product.service";
+import imageService from "@/services/image.service"
+import { mapStores } from 'pinia'
+import useProductStore from "@/stores/product.store"
 
 export default {
+    computed: {
+        ...mapStores(useProductStore)
+    },
     components: {
         ProductForm,
         TitleForm
@@ -22,13 +28,20 @@ export default {
     },
     methods: {
         async handleSubmit(data) {
-            try {
-                const response = await productService.createProduct(data);
-                const dataResponse = response.data;
-                console.log({dataResponse});
-                alert(dataResponse.data.message);
-            } catch (error) {
-                alert(error.response.data.message);
+            const { file, ...productData } = data;
+            const formData = new FormData();
+            formData.append("file", file);
+            const resImage = await imageService.uploadImage(formData)
+            if (resImage.status === "error") {
+                alert(resImage.message)
+            } else {
+                productData.imageId = resImage.data._id
+                const resProduct = await productService.createProduct(productData)
+                alert(resProduct.message)
+                if (resProduct.status == "success") {
+                    await this.productStore.addProduct(resProduct.data)
+                    this.$router.push({ name: "productPage" })
+                }
             }
         }
     }

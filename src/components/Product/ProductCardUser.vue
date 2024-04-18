@@ -1,6 +1,6 @@
 <template>
     <div class="product-card">
-        <img src="./Decision_Tree.jpg" alt="Product Image" class="product-image">
+        <img :src="product.imageUrl" alt="Product Image" class="product-image">
         <div class="product-info">
             <h2 class="product-name">{{ product.name }}</h2>
             <p class="product-price">{{ product.price }}</p>
@@ -19,23 +19,6 @@ export default {
             type: Object,
             required: true
         }
-    },
-    methods: {
-        getImageUrl(image) {
-            console.log({ image });
-            if (image && image.data && image.contentType) {
-                const base64Image = btoa(
-                    new Uint8Array(image.data).reduce(
-                        (data, byte) => data + String.fromCharCode(byte),
-                        ''
-                    )
-                );
-
-                return `data:${image.contentType};base64,${base64Image}`;
-            }
-            return './Decision_Tree.jpg'
-        }
-
     }
 };
 </script>

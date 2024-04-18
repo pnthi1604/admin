@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-primary" @click="handleClick"> {{ nameBtn }}</button>
+    <button type="submit" :class="'btn ' + styleBtn" @click="handleSubmit"> {{ nameBtn }}</button>
 </template>
 
 <script>
@@ -8,12 +8,15 @@ export default {
         nameBtn: {
             type: String,
             default: 'Submit'
+        },
+        styleBtn: {
+            type: String,
+            default: 'btn-primary'
         }
     },
     methods: {
-        handleClick(event) {
-            event.preventDefault();
-            this.$emit('click');
+        handleSubmit(event) {
+            this.$emit('submit', event);
         }
     }
 }

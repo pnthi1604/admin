@@ -8,7 +8,7 @@
         <div class="form-group">
             <label for="image">Upload Image</label>
             <input type="file" ref="file" @change="onSelect"/>
-            <div class="message text-danger">
+            <div class="message">
                 <p>{{ message }}</p>
             </div>
             <img v-if="productImageUrl" :src="productImageUrl" alt="" class="image-loaded"/>
@@ -66,7 +66,6 @@ export default {
     },
     data() {
         return {
-            _id: null,
             name: "Tên sách",
             price: 20000,
             quantity: 10,
@@ -96,17 +95,10 @@ export default {
             this.author = this.product.author;
             this.productImageUrl = this.product.imageUrl;
             this.imageId = this.product.imageId;
-            if (this.product._id) 
-                this._id = this.product._id;
         }
     },
     methods: {
         onSelect() {
-            //reset
-            this.message = ""
-            this.file = null;
-            this.productImageUrl = "";
-
             const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
             const file = this.$refs.file.files[0];
             this.file = file;
@@ -126,7 +118,7 @@ export default {
         },
         async handleSubmit(evnet) {
             evnet.preventDefault();
-            const data = {
+            this.$emit("submit", {
                 name: this.name,
                 price: this.price,
                 quantity: this.quantity,
@@ -137,11 +129,7 @@ export default {
                 author: this.author,
                 imageId: this.imageId,
                 file: this.file,
-            }
-            if (this._id) {
-                data._id = this._id;
-            }
-            this.$emit("submit", data);
+            });
         },
     },
 }

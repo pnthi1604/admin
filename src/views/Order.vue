@@ -1,9 +1,11 @@
-<template>    
+<template>
+    <input-search></input-search>
     <greeting :title="tilte"></greeting>
 </template>
 
 <script>
-import Greeting from "@/components/Utils/Greeting.vue";
+import Greeting from "@/components/Common/Greeting.vue";
+import InputSearch from "@/components/Common/InputSearch.vue";
 
 export default {
     data() {
@@ -13,6 +15,7 @@ export default {
     },
     components: {
         Greeting,
+        InputSearch,
     },
 }
 </script>

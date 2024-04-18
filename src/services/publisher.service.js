@@ -1,16 +1,16 @@
 import createApiClient from "./api.service.js"
 
-class ProductService {
-    constructor(baseUrl = "/api/products") {
+class PublisherService {
+    constructor(baseUrl = "/api/publishers") {
         this.api = createApiClient(baseUrl)
     }
 
-    async getProducts() {
+    async getPublishers() {
         try {
             const data = (await this.api.get("/")).data
             return {
                 status: "success",
-                message: data.message || "Products retrieved successfully",
+                message: data.message || "Publishers retrieved successfully",
                 data: data.data,
             }
         } catch (err) {
@@ -21,28 +21,12 @@ class ProductService {
         }
     }
 
-    async getProductById(id) {
+    async getPublisherById(id) {
         try {
             const data = (await this.api.get(`/${id}`)).data
             return {
                 status: "success",
-                message: data.message || "Product retrieved successfully",
-                data: data.data,
-            }
-        } catch (err) {
-            return {
-                status: "error",
-                message: err.response.data.message,
-            }
-        }
-    }
-    
-    async createProduct(product) {
-        try {
-            const data = (await this.api.post("/", product)).data
-            return {
-                status: "success",
-                message: data.message || "Product created successfully",
+                message: data.message || "Publisher retrieved successfully",
                 data: data.data,
             }
         } catch (err) {
@@ -53,12 +37,12 @@ class ProductService {
         }
     }
 
-    async updateProduct(id, product) {
+    async createPublisher(publisher) {
         try {
-            const data = (await this.api.put(`/${id}`, product)).data
+            const data = (await this.api.post("/", publisher)).data
             return {
                 status: "success",
-                message: data.message || "Product updated successfully",
+                message: data.message || "Publisher created successfully",
                 data: data.data,
             }
         } catch (err) {
@@ -69,12 +53,28 @@ class ProductService {
         }
     }
 
-    async deleteProduct(id) {
+    async updatePublisher(id, publisher) {
+        try {
+            const data = (await this.api.put(`/${id}`, publisher)).data
+            return {
+                status: "success",
+                message: data.message || "Publisher updated successfully",
+                data: data.data,
+            }
+        } catch (err) {
+            return {
+                status: "error",
+                message: err.response.data.message,
+            }
+        }
+    }
+
+    async deletePublisher(id) {
         try {
             const data = (await this.api.delete(`/${id}`)).data
             return {
                 status: "success",
-                message: data.message || "Product deleted successfully",
+                message: data.message || "Publisher deleted successfully",
             }
         } catch (err) {
             return {
@@ -85,4 +85,4 @@ class ProductService {
     }
 }
 
-export default new ProductService()
+export default new PublisherService()

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <login :isRegister="isRegister" :titleForm="titleForm" @submit="handleSubmit"></login>
+        <login :isRegister="false" :titleForm="titleForm" @submit="handleSubmit"></login>
     </div>
 </template>
 
@@ -16,7 +16,6 @@ export default {
     },
     data() {
         return {
-            isRegister: false,
             titleForm: 'Đăng nhập'
         };
     },
@@ -25,13 +24,14 @@ export default {
     },
     methods: {
         async handleSubmit(data) {
-            try {
-                const response = await authService.login(data)
-                this.authStore.setRole(response?.data?.data?.role)
-                // alert(response.data.message)
+            const res = await authService.login(data);
+            console.log({res})
+            if (res.status == "success") {
+                this.authStore.setRole(res.data.role)
+                alert(res.message)
                 this.$router.push({ name: "adminPage"})
-            } catch (err) {
-                alert(err.response.data.message)
+            } else {
+                alert(res.message)
             }
         }
     }

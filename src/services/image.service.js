@@ -1,32 +1,20 @@
 import createApiClient from "./api.service.js"
 
-class AuthService {
-    constructor(baseUrl = "/api") {
+class ImageService {
+    constructor(baseUrl = "/api/images") {
         this.api = createApiClient(baseUrl)
     }
 
-    async login(user) {
+    async uploadImage(formData) {
         try {
-            const data = (await this.api.post("/login", user)).data
+            const data = (await this.api.post("/", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })).data
             return {
                 status: "success",
-                message: data.message || "User logged in successfully",
-                data: data.data,
-            }
-        } catch (err) {
-            return {
-                status: "error",
-                message: err.response.data.message,
-            }
-        }
-    }
-    
-    async register(user) {
-        try {
-            const data = (await this.api.post("/register", user)).data
-            return {
-                status: "success",
-                message: data.message || "User registered successfully",
+                message: data.message || "Image uploaded successfully",
                 data: data.data,
             }
         } catch (err) {
@@ -37,12 +25,28 @@ class AuthService {
         }
     }
 
-    async logout() {
+    async getImageById(id) {
         try {
-            const data = (await this.api.post("/logout")).data
+            const data = (await this.api.get(`/${id}`)).data
             return {
                 status: "success",
-                message: data.message || "User logged out successfully",
+                message: data.message || "Image retrieved successfully",
+                data: data.data,
+            }
+        } catch (err) {
+            return {
+                status: "error",
+                message: err.response.data.message,
+            }
+        }
+    }
+
+    async deleteImage(id) {
+        try {
+            const data = (await this.api.delete(`/${id}`)).data
+            return {
+                status: "success",
+                message: data.message || "Image deleted successfully",
             }
         } catch (err) {
             return {
@@ -53,4 +57,4 @@ class AuthService {
     }
 }
 
-export default new AuthService()
+export default new ImageService()

@@ -3,14 +3,27 @@ import Product from "@/views/Product.vue";
 import Publisher from "@/views/Publisher.vue";
 import Order from "@/views/Order.vue";
 import AddProduct from "@/views/AddProduct.vue";
+import Upload from "@/views/Upload.vue";
+import UpdateProduct from "@/views/UpdateProduct.vue";
+import ProductDetai from "@/views/ProductDetail.vue";
+import UpdatePublisher from "@/views/UpdatePublisher.vue";
 
 const routes = [
+    {
+        path: "/upload",
+        component: Upload,
+    },
     {
         path: "/",
         redirect: "/admin",
     },
     {
         path: "/admin",
+        meta : {
+            requiresAuth: true,
+            role: "admin",
+        },
+        props: true,
         children: [
             {
                 path: "",
@@ -19,43 +32,78 @@ const routes = [
                 meta : {
                     requiresAuth: true,
                     role: "admin",
-                }
+                },
+                props: true,
             },
             {
-                path: "/products",
-                component: Product,
-                name: "productPage",
-                meta : {
-                    requiresAuth: true,
-                    role: "admin",
-                }
+                path: "products",
+                children: [
+                    {
+                        path: "",
+                        component: Product,
+                        name: "productPage",
+                        meta : {
+                            requiresAuth: true,
+                            role: "admin",
+                        },
+                        props: true,
+                    },
+                    {
+                        path: "detail/:id",
+                        name: "productDetailPage",
+                        component: ProductDetai,
+                    },
+                    {
+                        path: "add-product",
+                        component: AddProduct,
+                        name: "addProductPage",
+                        meta : {
+                            requiresAuth: true,
+                            role: "admin",
+                        },
+                        props: true,
+                    },
+                    {
+                        path: "update-product/:id",
+                        component: UpdateProduct,
+                        name: "updateProductPage",
+                        meta : {
+                            requiresAuth: true,
+                            role: "admin",
+                        },
+                        props: true,
+                    },
+                ]
             }, 
             {
-                path: "/add-product",
-                component: AddProduct,
-                name: "addProductPage",
-                meta : {
-                    requiresAuth: true,
-                    role: "admin",
-                }
+                path: "publishers",
+                children: [
+                    {
+                        path: "",
+                        component: Publisher,
+                        name: "publisherPage",
+                    },
+                    {
+                        path: "/update-publisher/:id",
+                        component: UpdatePublisher,
+                        name: "updatePublisherPage",
+                    },
+                    {
+                        path: "/add-publisher",
+                        component: UpdatePublisher,
+                        name: "addPublisherPage",
+                    },
+                ]
             },
             {
-                path: "/publishers",
-                component: Publisher,
-                name: "publisherPage",
-                meta : {
-                    requiresAuth: true,
-                    role: "admin",
-                }
-            },
-            {
-                path: "/orders",
+                path: "orders",
                 component: Order,
                 name: "orderPage",
                 meta : {
                     requiresAuth: true,
                     role: "admin",
-                }
+                },
+                props: true,
             }
         ],
     }

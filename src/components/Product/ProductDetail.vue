@@ -1,0 +1,70 @@
+<template>
+    <div class="product-detail">
+        <div class="product-item">
+            <img :src="product.imageUrl" alt="product.name" class="product-image" />
+            <div class="product-info">
+                <h4 class="product-name">{{ shortForm(product.name) }}</h4>
+                <p class="attribute-product">Giá: {{ shortForm(product.price) }}đ</p>
+                <p class="attribute-product">Số lượng: {{ shortForm(product.quantity) }}</p>
+                <p class="attribute-product">Tác giả: {{ shortForm(product.author) }}</p>
+                <p class="attribute-product">Thời hạn mượn: {{ shortForm(product.borrowingTime) }} ngày</p>
+                <p class="attribute-product">Mô tả: {{ shortForm(product.description) }}</p>
+                <p class="attribute-product">Nhà xuất bản: {{ shortForm(product.publisher) }}</p>
+                <p class="attribute-product">Năm xuất bản: {{ shortForm(product.publishYear) }}</p>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        product: {
+            type: Object,
+            required: true
+        }
+    },
+    methods: {
+        shortForm(text, maxLength) {
+            if (!maxLength)
+                maxLength = 1000
+            if (text.length > maxLength) {
+                return text.substring(0, maxLength) + '...';
+            }
+            return text;
+        }
+    }
+};
+</script>
+
+<style scoped>
+.product-detail {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+    min-height: 200px;
+    box-shadow: 3px 3px 10px #e0e0e0;
+}
+
+.product-item {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+}
+
+.product-item .product-image {
+    width: 200px;
+    height: 200px;
+}
+
+.product-item .product-name {
+    font-size: 20px;
+}
+
+.product-item .attribute-product {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+</style>

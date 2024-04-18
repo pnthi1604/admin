@@ -45,14 +45,12 @@
             </label>
         </div>
         <div class="submit-form">
-            <!-- <submit-btn @submit="handleSubmit"></submit-btn> -->
-            <btn :nameBtn="isRegister ? 'Register' : 'Login'" @click="handleSubmit"></btn>
+            <btn @submit="handleSubmit" :contentComponent="'<p>Submit</p>'"></btn>
         </div>
     </form>
 </template>
 
 <script>
-// import SubmitBtn from "@/components/Common/SubmitBtn.vue";
 import TitleForm from "@/components/Common/TitleForm.vue";
 import Btn from "@/components/Common/Btn.vue";
 
@@ -100,7 +98,8 @@ export default {
                 password: this.password,
             }
         },
-        handleSubmit() {
+        handleSubmit(event) {
+            event.preventDefault();
             this.$emit('submit', this.getData());
         }
     },

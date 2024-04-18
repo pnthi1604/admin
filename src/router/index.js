@@ -19,7 +19,7 @@ router.beforeEach((to, from, next) => {
     }
 
     const authStore = useAuthStore()
-    const role = authStore.$state?.role
+    const role = authStore.getRole
     if (role != to.meta.role) {
         return next({ name: 'login' })
     }
