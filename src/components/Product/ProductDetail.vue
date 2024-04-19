@@ -4,12 +4,14 @@
             <img :src="product.imageId.imageUrl" alt="product.name" class="product-image" />
             <div class="product-info">
                 <h4 class="product-name">{{ shortForm(product.name) }}</h4>
-                <p class="attribute-product">Giá: {{ shortForm(product.price) }}đ</p>
+                <p class="attribute-product">Giá: <span class="font-weight-bold">{{ shortForm(product.price) }}đ</span>
+                </p>
                 <p class="attribute-product">Số lượng: {{ shortForm(product.quantity) }}</p>
                 <p class="attribute-product">Tác giả: {{ shortForm(product.author) }}</p>
-                <p class="attribute-product">Thời hạn mượn: {{ shortForm(product.borrowingTime) }} ngày</p>
+                <p class="attribute-product">Thời hạn mượn: <span class="font-weight-bold">{{
+                shortForm(product.borrowingTime) }} ngày</span></p>
                 <p class="attribute-product">Mô tả: {{ shortForm(product.description) }}</p>
-                <p class="attribute-product">Nhà xuất bản: {{ shortForm(product.publisherId.publisher) }}</p>
+                <p class="attribute-product">Nhà xuất bản: {{ shortForm(product.publisherId.name) }}</p>
                 <p class="attribute-product">Năm xuất bản: {{ shortForm(product.publishYear) }}</p>
             </div>
         </div>
@@ -25,7 +27,7 @@ export default {
         }
     },
     created() {
-        console.log({"this.product": this.product});
+        console.log({ "this.product": this.product });
     },
     methods: {
         shortForm(text, maxLength) {

@@ -24,6 +24,6 @@ export default {
 
 <style scoped>
 button {
-    width: 100px;
+    min-width: 100px;
 }
 </style>
