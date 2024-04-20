@@ -1,7 +1,7 @@
 <template>
-    <app-header></app-header>
+    <app-header :role="role" @login="handleLogin" @logout="logout"></app-header>
     <div class="container">
-        <router-view></router-view>
+        <router-view @login="handleLogin"></router-view>
     </div>
     <!-- <app-footer class="app-footer"></app-footer> -->
 </template>
@@ -9,16 +9,43 @@
 <script>
 import AppHeader from "@/components/Common/AppHeader.vue"
 import AppFooter from "@/components/Common/AppFooter.vue"
+import useAuthStore from "@/stores/auth.store.js";
+import { mapStores } from "pinia";
 
 export default {
+    computed: {
+        ...mapStores(useAuthStore),
+    },
     components: {
         AppHeader,
         AppFooter,
     },
     data() {
         return {
+            adminRole: "admin",
+            guestRole: "guest",
+            role: "guest"
         }
     },
+    methods: {
+        handleLogin() {
+            const role = localStorage.getItem("role")
+            if (role == this.adminRole) {
+                this.authStore.setRole(this.adminRole)
+                this.$router.push({ name: "adminPage" })
+                this.role = this.adminRole
+                return
+            }
+            this.role = this.guestRole
+            this.$router.push({ name: "login" })
+        },
+        logout() {
+            localStorage.removeItem("role")
+            this.authStore.setRole(this.guestRole)
+            this.role = this.guestRole
+            this.$router.push({ name: "login" })
+        }
+    }
 }
 </script>
 

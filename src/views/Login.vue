@@ -25,10 +25,11 @@ export default {
     methods: {
         async handleSubmit(data) {
             const res = await authService.login(data);
-            console.log({res})
             if (res.status == "success") {
                 this.authStore.setRole(res.data.role)
+                localStorage.setItem("role", res.data.role)
                 alert(res.message)
+                this.$emit("login")
                 this.$router.push({ name: "adminPage"})
             } else {
                 alert(res.message)

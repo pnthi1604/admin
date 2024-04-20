@@ -7,7 +7,7 @@ class ProductService {
 
     async getProducts() {
         try {
-            const data = (await this.api.get("/")).data
+            const data = (await this.api.get("/admin")).data
             return {
                 status: "success",
                 message: data.message || "Products retrieved successfully",

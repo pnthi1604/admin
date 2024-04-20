@@ -9,8 +9,8 @@
                 aria-expanded="false">
             </button>
             <div class="dropdown-menu">
-                <router-link v-if="role==guestRole" class="dropdown-item" :to="{name: 'login'}">Đăng nhập</router-link>
-                <router-link v-if="role==adminRole" class="dropdown-item" @click="logout" :to="{name: 'login'}">Đăng xuất</router-link>
+                <div v-if="role==guestRole" class="dropdown-item login-btn" @click="login">Đăng nhập</div>
+                <div v-if="role==adminRole" class="dropdown-item logout-btn" @click="logout">Đăng xuất</div>
             </div>
         </div>
     </nav>
@@ -18,18 +18,16 @@
 
 <script>
 import NavItem from "@/components/Common/NavItem.vue";
-import useAuthStore from "@/stores/auth.store.js";
-import { mapStores } from "pinia";
 
 export default {
-    computed: {
-        ...mapStores(useAuthStore),
-        role() {
-            return this.authStore.getRole
-        }
-    },
     components: {
         NavItem,
+    },
+    props: {
+        role: {
+            type: String,
+            default: "guest"
+        }
     },
     data() {
         return {
@@ -39,8 +37,11 @@ export default {
         
     },
     methods: {
+        login() {
+            this.$emit('login');
+        },
         logout() {
-            this.authStore.setRole(this.guestRole)
+            this.$emit('logout');
         }
     }
 }
@@ -49,5 +50,8 @@ export default {
 <style scoped>
 .dropdown {
     margin-left: auto;
+}
+.login-btn:hover, .logout-btn:hover {
+    cursor: pointer;
 }
 </style>

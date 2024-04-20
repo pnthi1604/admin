@@ -26,9 +26,6 @@ export default {
             required: true
         }
     },
-    created() {
-        console.log({ "this.product": this.product });
-    },
     methods: {
         shortForm(text, maxLength) {
             if (!text)
