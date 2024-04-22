@@ -3,13 +3,13 @@
         <greeting :title="title"></greeting>
         <btn class="btn-add-product" nameBtn="Thêm" @click="addPublisher"></btn>
     </div>
-    <input-search @search="handleSearch" class="input-search"></input-search>
+    <input-search @search="handleSearch" class="input-search" :searchBy="searchBy"></input-search>
     <div class="container-publisher-item">
         <publisher-detail 
             class="publisher-detail" 
             v-for="publisher in filterPublishers" 
             :item="publisher" 
-            :key="publisher._id"
+            :key="publisher.__uniqueKey || publisher._id"
             @update="handleUpdate"
             @delete="handleDelete"
             >
@@ -30,6 +30,8 @@ export default {
             title: 'Quản lý nhà xuất bản',
             publishers: [],
             filterPublishers: [],
+            searchBy: "Tìm kiếm theo tên, địa chỉ",
+            searchTerm: "",
         };
     },
     components: {
@@ -38,15 +40,30 @@ export default {
         InputSearch,
         PublisherDetail,
     },
-    mounted() {
-        this.getPublishers()
+    beforeMount: async function() {
+        await this.getPublishers()
     },
     methods: {
         handleSearch(searchTerm) {
-            if (!searchTerm || searchTerm == "")
+            this.searchTerm = searchTerm
+            this.filter()
+        },
+        filter() {
+            if (!this.searchTerm || this.searchTerm == "")
                 this.filterPublishers = this.publishers;
             else
-                this.filterPublishers = this.publisherstore.searchProduct(searchTerm);
+                this.filterPublishers = this.publishers.filter(product => {
+                    return product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        product.address.toLowerCase().includes(this.searchTerm.toLowerCase())
+                });
+            this.filterPublishers = this.filterPublishers.map(product => {
+                product.__uniqueKey = new Date()
+                return product
+            })
+        },
+        async reset() {
+            await this.getPublishers()
+            this.filter()
         },
         async getPublishers() {
             const res = await publisherService.getPublishers();
@@ -70,9 +87,6 @@ export default {
                 params: {
                     id: publisher._id,
                 },
-                query: {
-                    ...publisher
-                }
             });
         },
         async handleDelete(publisher) {
@@ -80,15 +94,9 @@ export default {
                 const resDeletePublisher = await publisherService.deletePublisher(publisher._id)
                 if (resDeletePublisher.status == "error")
                     alert(resDeletePublisher.message)
-                this.publishers = await this.getPublishers()
+                await this.reset()
             }
         },
-        handleSearch(findString) {
-            this.filterPublishers = this.publishers.filter(publisher => {
-                return publisher.name.toLowerCase().includes(findString.toLowerCase())
-                || publisher.address.toLowerCase().includes(findString.toLowerCase())
-            })
-        }
     },
 }
 </script>

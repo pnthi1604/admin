@@ -1,20 +1,16 @@
 import createApiClient from "./api.service.js"
 
-class ImageService {
-    constructor(baseUrl = "/api/images") {
+class OrderService {
+    constructor(baseUrl = "/api/orders") {
         this.api = createApiClient(baseUrl)
     }
 
-    async uploadImage(formData) {
+    async getAll() {
         try {
-            const data = (await this.api.post("", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            })).data
+            const data = (await this.api.get("admin")).data
             return {
                 status: "success",
-                message: data.message || "Image uploaded successfully",
+                message: data.message || "Orders retrieved successfully",
                 data: data.data,
             }
         } catch (err) {
@@ -25,12 +21,12 @@ class ImageService {
         }
     }
 
-    async getImageById(id) {
+    async getOrder(orderId) {
         try {
-            const data = (await this.api.get(`/${id}`)).data
+            const data = (await this.api.get(`/${orderId}`)).data
             return {
                 status: "success",
-                message: data.message || "Image retrieved successfully",
+                message: data.message || "Order retrieved successfully",
                 data: data.data,
             }
         } catch (err) {
@@ -41,12 +37,17 @@ class ImageService {
         }
     }
 
-    async deleteImage(id) {
+    async updateOrder({adminId, orderId, orderStatus}) {
         try {
-            const data = (await this.api.delete(`/${id}`)).data
+            let data;
+            if (adminId)
+                data = (await this.api.put(`admin/${adminId}/${orderId}`, { orderStatus })).data
+            else
+                data = (await this.api.put(`user/${orderId}`, { orderStatus })).data
             return {
                 status: "success",
-                message: data.message || "Image deleted successfully",
+                message: data.message || "Order updated successfully",
+                data: data.data,
             }
         } catch (err) {
             return {
@@ -57,4 +58,4 @@ class ImageService {
     }
 }
 
-export default new ImageService()
+export default new OrderService()

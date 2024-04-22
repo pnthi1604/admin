@@ -1,15 +1,18 @@
 <template>
-    <div class="container-top">
-        <greeting :title="title"></greeting>
-        <btn nameBtn="Sửa" styleBtn="btn-warning" @click="handleEdit"></btn>
+    <div class="">
+        <div class="container-top">
+            <greeting :title="title"></greeting>
+            <btn nameBtn="Sửa" styleBtn="btn-warning" @click="handleEdit"></btn>
+        </div>
+        <product-detail :product="product"></product-detail>
     </div>
-    <product-detail :product="product"></product-detail>
 </template>
 
 <script>
 import Greeting from '@/components/Common/Greeting.vue';
 import ProductDetail from '@/components/Product/ProductDetail.vue';
 import Btn from "@/components/Common/Btn.vue";
+import productService from '@/services/product.service';
 
 export default {
     components: {
@@ -17,8 +20,13 @@ export default {
         ProductDetail,
         Btn,
     },
-    created() {
-        this.product = JSON.parse(this.$route.query.data)
+    beforeMount: async function() {
+        const res = await productService.getProductById(this.$route.params.id);
+        if (res.status == "success")
+            this.product = res.data;
+        else {
+            alert(res.message)
+        }
     },
     data() {
         return {
@@ -33,9 +41,6 @@ export default {
                 params: {
                     id: this.product._id
                 },
-                query: {
-                    data: JSON.stringify(this.product)
-                }
             });
         },
     },

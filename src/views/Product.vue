@@ -1,28 +1,30 @@
 <template>
-    <div class="container-top">
-        <greeting :title="title"></greeting>
-        <btn class="btn-add-product" nameBtn="Thêm" @click="addProduct"></btn>
-    </div>
-    <input-search @search="handleSearch" class="input-search"></input-search>
-    <div class="row">
-        <table class="table">
-            <thead class="">
-                <tr>
-                    <th scope="col">Sản phẩm</th>
-                    <th scope="col">Giá</th>
-                    <th scope="col">Số lượng</th>
-                    <th scope="col">Hạn mượn</th>
-                    <th scope="col">Tác giả</th>
-                    <th scope="col">Nhà xuất bản</th>
-                    <th scope="col">Chức năng</th>
-                </tr>
-            </thead>
-            <tbody>
-                <product-item v-for="product in filterProducts" :key="product.id" :product="product"
-                    @deleteProduct="handleDeleteProduct" @showDetail="handleShowDetail">
-                </product-item>
-            </tbody>
-        </table>
+    <div class="">
+        <div class="container-top">
+            <greeting :title="title"></greeting>
+            <btn class="btn-add-product" nameBtn="Thêm" @click="addProduct"></btn>
+        </div>
+        <input-search @search="handleSearch" class="input-search" :searchBy="searchBy"></input-search>
+        <div class="row">
+            <table class="table table-bordered">
+                <thead class="">
+                    <tr>
+                        <th scope="col">Sản phẩm</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Hạn mượn</th>
+                        <th scope="col">Tác giả</th>
+                        <th scope="col">Nhà xuất bản</th>
+                        <th scope="col">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <product-item v-for="product in filterProducts" :key="product.__uniqueKey || product._id" :product="product"
+                        @deleteProduct="handleDeleteProduct" @showDetail="handleShowDetail">
+                    </product-item>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -39,7 +41,8 @@ export default {
             title: 'Quản lý sản phẩm',
             products: [],
             filterProducts: [],
-            searchTerm: ""
+            searchTerm: "",
+            searchBy: "Tìm kiếm theo sản phẩm, tác giả, nhà xuất bản"
         };
     },
     components: {
@@ -48,8 +51,8 @@ export default {
         ProductItem,
         InputSearch
     },
-    mounted() {
-        this.getProducts();
+    beforeMount: async function() {
+        await this.getProducts();
     },
     methods: {
         handleSearch(searchTerm) {
@@ -65,6 +68,10 @@ export default {
                         product.author.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                         product.publisherId.name.toLowerCase().includes(this.searchTerm.toLowerCase())
                 });
+            this.filterProducts = this.filterProducts.map(product => {
+                product.__uniqueKey = new Date()
+                return product
+            })
         },
         async getProducts() {
             const res = await productService.getProducts();
@@ -97,9 +104,6 @@ export default {
                 name: 'productDetailPage',
                 params: {
                     id: product._id
-                },
-                query: {
-                    data: JSON.stringify(product)
                 }
             });
         }

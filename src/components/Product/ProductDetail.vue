@@ -59,7 +59,8 @@ export default {
 
 .product-item .product-image {
     width: 200px;
-    height: 200px;
+    min-height: 200px;
+    object-fit: cover;
 }
 
 .product-item .product-name {

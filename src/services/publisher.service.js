@@ -7,10 +7,26 @@ class PublisherService {
 
     async getPublishers() {
         try {
-            const data = (await this.api.get("/")).data
+            const data = (await this.api.get("")).data
             return {
                 status: "success",
                 message: data.message || "Publishers retrieved successfully",
+                data: data.data,
+            }
+        } catch (err) {
+            return {
+                status: "error",
+                message: err.response.data.message,
+            }
+        }
+    }
+
+    async createPublisher(publisher) {
+        try {
+            const data = (await this.api.post("", publisher)).data
+            return {
+                status: "success",
+                message: data.message || "Publisher created successfully",
                 data: data.data,
             }
         } catch (err) {
@@ -27,22 +43,6 @@ class PublisherService {
             return {
                 status: "success",
                 message: data.message || "Publisher retrieved successfully",
-                data: data.data,
-            }
-        } catch (err) {
-            return {
-                status: "error",
-                message: err.response.data.message,
-            }
-        }
-    }
-
-    async createPublisher(publisher) {
-        try {
-            const data = (await this.api.post("/", publisher)).data
-            return {
-                status: "success",
-                message: data.message || "Publisher created successfully",
                 data: data.data,
             }
         } catch (err) {

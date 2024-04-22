@@ -1,5 +1,7 @@
 <template>
-    <greeting :title="tilte"></greeting>
+    <div class="">
+        <greeting :title="tilte"></greeting>
+    </div>
 </template>
 
 <script>

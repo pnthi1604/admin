@@ -2,11 +2,15 @@ import { defineStore } from 'pinia'
 
 const authStore = defineStore('auth', {
     state: () => ({
-        role: "guest"
+        role: "guest",
+        user: null,
     }),
     getters: {
         getRole() {
             return this.role
+        },
+        getUser() {
+            return this.user
         }
     },
     actions: {
@@ -15,6 +19,12 @@ const authStore = defineStore('auth', {
         },
         removeRole() {
             this.role = "guest"
+        },
+        setUser(user) {
+            this.user = user
+        },
+        resetUser() {
+            this.user = null
         }
     },
 })

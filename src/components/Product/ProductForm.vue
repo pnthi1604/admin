@@ -7,11 +7,11 @@
 
         <div class="form-group">
             <label for="image">Upload Image</label>
-            <input type="file" ref="file" @change="onSelect"/>
+            <input type="file" ref="file" @change="onSelect" />
             <div class="message text-danger">
                 <p>{{ message }}</p>
             </div>
-            <img v-if="imageUrl" :src="imageUrl" alt="" class="image-loaded"/>
+            <img v-if="imageUrl" :src="imageUrl" alt="" class="image-loaded" />
         </div>
 
         <div class="form-group">
@@ -41,7 +41,7 @@
 
         <div class="form-group">
             <label for="describe">Mô tả</label>
-            <textarea class="form-control" id="describe" v-model="description"></textarea>
+            <textarea class="form-control" id="describe" v-model="description" style="height: 160px"></textarea>
         </div>
 
         <div class="form-group">
@@ -58,6 +58,12 @@
 import Btn from "@/components/Common/Btn.vue";
 
 export default {
+    props: {
+        product: {
+            type: Object,
+            default: null,
+        }
+    },
     data() {
         return {
             _id: null,
@@ -65,10 +71,10 @@ export default {
             price: 20000,
             quantity: 10,
             publishYear: 2024,
-            publisherId: "6606ddfff8ad64934b223c2d",
+            publisherId: "662663dd5b8e06a1ee068cee",
             borrowingTime: 10,
-            description: "Mở cánh cửa vào một thế giới mới với cuốn sách này. Nó đưa bạn vào một hành trình đầy kỳ bí, nơi những nhân vật sống động và câu chuyện sâu sắc chờ đợi. Từ trang đầu tiên, bạn sẽ bị cuốn hút và không thể buông xuôi cho đến khi đọc hết.",
-            author: "Nguyễn Nhật Ánh",
+            description: "Sách đầu tay của tác giả!",
+            author: "Thi Pham",
             file: null,
             message: "",
             imageUrl: null,
@@ -78,24 +84,28 @@ export default {
     components: {
         Btn,
     },
-    created() {
-        if (this.$route.params.id) {
-            const product = JSON.parse(this.$route.query.data)
-            this.name = product.name;
-            this.price = product.price;
-            this.quantity = product.quantity;
-            this.publishYear = product.publishYear;
-            this.publisherId = product.publisherId._id;
-            this.borrowingTime = product.borrowingTime;
-            this.description = product.description;
-            this.author = product.author;
-            this.imageUrl = product.imageId.imageUrl;
-            this.imageId = product.imageId._id;
-            if (product._id) 
-                this._id = product._id;
+    watch: {
+        product(newVal, oldVal) {
+            this.formData(newVal);
         }
     },
     methods: {
+        formData(product) {
+            if (product) {
+                this.name = product.name;
+                this.price = product.price;
+                this.quantity = product.quantity;
+                this.publishYear = product.publishYear;
+                this.publisherId = product.publisherId._id;
+                this.borrowingTime = product.borrowingTime;
+                this.description = product.description;
+                this.author = product.author;
+                this.imageUrl = product.imageId.imageUrl;
+                this.imageId = product.imageId._id;
+                if (product._id)
+                    this._id = product._id;
+            }
+        },
         onSelect() {
             //reset
             this.message = ""

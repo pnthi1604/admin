@@ -1,5 +1,5 @@
 <template>
-    <app-header :role="role" @login="handleLogin" @logout="logout"></app-header>
+    <app-header :role="role" @login="handleLogin" @logout="handleLogout"></app-header>
     <div class="container">
         <router-view @login="handleLogin"></router-view>
     </div>
@@ -32,18 +32,23 @@ export default {
             const role = localStorage.getItem("role")
             if (role == this.adminRole) {
                 this.authStore.setRole(this.adminRole)
-                this.$router.push({ name: "adminPage" })
+                const admin = JSON.parse(localStorage.getItem("user"))
                 this.role = this.adminRole
+                this.authStore.setUser(admin)
+                this.$router.push({ name: "adminPage" })
                 return
             }
             this.role = this.guestRole
             this.$router.push({ name: "login" })
         },
-        logout() {
+        handleLogout() {
             localStorage.removeItem("role")
+            localStorage.removeItem("user")
             this.authStore.setRole(this.guestRole)
             this.role = this.guestRole
-            this.$router.push({ name: "login" })
+            if (this.$route?.meta?.requiresAuth) {
+                this.$router.push({ name: "login" })
+            }
         }
     }
 }

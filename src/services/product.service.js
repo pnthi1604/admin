@@ -5,9 +5,25 @@ class ProductService {
         this.api = createApiClient(baseUrl)
     }
 
+    async createProduct(product) {
+        try {
+            const data = (await this.api.post("", product)).data
+            return {
+                status: "success",
+                message: data.message || "Product created successfully",
+                data: data.data,
+            }
+        } catch (err) {
+            return {
+                status: "error",
+                message: err.response.data.message,
+            }
+        }
+    }
+
     async getProducts() {
         try {
-            const data = (await this.api.get("/admin")).data
+            const data = (await this.api.get("admin")).data
             return {
                 status: "success",
                 message: data.message || "Products retrieved successfully",
@@ -27,22 +43,6 @@ class ProductService {
             return {
                 status: "success",
                 message: data.message || "Product retrieved successfully",
-                data: data.data,
-            }
-        } catch (err) {
-            return {
-                status: "error",
-                message: err.response.data.message,
-            }
-        }
-    }
-    
-    async createProduct(product) {
-        try {
-            const data = (await this.api.post("/", product)).data
-            return {
-                status: "success",
-                message: data.message || "Product created successfully",
                 data: data.data,
             }
         } catch (err) {

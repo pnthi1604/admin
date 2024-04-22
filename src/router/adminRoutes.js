@@ -1,11 +1,12 @@
 import Home from "@/views/Home.vue";
 import Product from "@/views/Product.vue";
 import Publisher from "@/views/Publisher.vue";
-import Order from "@/views/Order.vue";
 import UpdateProduct from "@/views/UpdateProduct.vue";
 import Upload from "@/views/Upload.vue";
-import ProductDetai from "@/views/ProductDetail.vue";
+import ProductDetail from "@/views/ProductDetail.vue";
 import UpdatePublisher from "@/views/UpdatePublisher.vue";
+import Order from "@/views/Order.vue";
+import OrderDatail from "@/views/OrderDetail.vue";
 
 const routes = [
     {
@@ -28,49 +29,31 @@ const routes = [
                 path: "",
                 component: Home,
                 name: "adminPage",
-                meta : {
-                    requiresAuth: true,
-                    role: "admin",
-                },
-                props: true,
             },
             {
                 path: "products",
+                props: true,
                 children: [
                     {
                         path: "",
                         component: Product,
                         name: "productPage",
-                        meta : {
-                            requiresAuth: true,
-                            role: "admin",
-                        },
-                        props: true,
                     },
                     {
-                        path: "detail/:id",
+                        path: ":id",
                         name: "productDetailPage",
-                        component: ProductDetai,
+                        component: ProductDetail,
                     },
                     {
                         path: "add-product",
                         component: UpdateProduct,
                         name: "addProductPage",
-                        meta : {
-                            requiresAuth: true,
-                            role: "admin",
-                        },
                         props: true,
                     },
                     {
                         path: "update-product/:id",
                         component: UpdateProduct,
                         name: "updateProductPage",
-                        meta : {
-                            requiresAuth: true,
-                            role: "admin",
-                        },
-                        props: true,
                     },
                 ]
             }, 
@@ -83,12 +66,12 @@ const routes = [
                         name: "publisherPage",
                     },
                     {
-                        path: "/update-publisher/:id",
+                        path: "update-publisher/:id",
                         component: UpdatePublisher,
                         name: "updatePublisherPage",
                     },
                     {
-                        path: "/add-publisher",
+                        path: "add-publisher",
                         component: UpdatePublisher,
                         name: "addPublisherPage",
                     },
@@ -96,14 +79,19 @@ const routes = [
             },
             {
                 path: "orders",
-                component: Order,
-                name: "orderPage",
-                meta : {
-                    requiresAuth: true,
-                    role: "admin",
-                },
-                props: true,
-            }
+                children: [
+                    {
+                        path: "",
+                        component: Order,
+                        name: "orderPage",
+                    },
+                    {
+                        path: ":id",
+                        component: OrderDatail,
+                        name: "orderDetailPage",
+                    },
+                ],
+            },
         ],
     }
 ]

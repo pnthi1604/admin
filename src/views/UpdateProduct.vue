@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <title-form :title="title"></title-form>
-        <product-form @submit="handleSubmit"></product-form>
+        <product-form :product="product" @submit="handleSubmit"></product-form>
     </div>
 </template>
 
@@ -18,12 +18,20 @@ export default {
     },
     data() {
         return {
-            title: "Thêm sản phẩm"
+            title: "Thêm sản phẩm",
+            product: null,
         }
     },
-    created() {
-        if (this.$route.params.id) {
+    beforeMount: async function() {
+        const id = this.$route.params.id
+        if (id) {
             this.title = "Cập nhật sản phẩm"
+            const res = await productService.getProductById(id)
+            if (res.status === "success") {
+                this.product = res.data
+            } else {
+                alert(res.message)
+            }
         }
     },
     methods: {

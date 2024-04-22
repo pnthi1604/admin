@@ -1,24 +1,26 @@
 <template>
-    <div class="file">
-        <form enctype="multipart/form-data">
-            <div class="fields">
-                <label for="a">Upload File</label><br />
-                <input type="text" name="a"/>
-            </div>
-            <div class="fields">
-                <label>Upload File</label><br />
-                <input type="file" ref="file" @change="onSelect" />
-            </div>
-            <div class="fields">
-                <button @click="submit">Submit</button>
-            </div>
-            <div class="message">
-                <h5>{{ message }}</h5>
-            </div>
-        </form>
+    <div class="">
+        <div class="file">
+            <form enctype="multipart/form-data">
+                <div class="fields">
+                    <label for="a">Upload File</label><br />
+                    <input type="text" name="a"/>
+                </div>
+                <div class="fields">
+                    <label>Upload File</label><br />
+                    <input type="file" ref="file" @change="onSelect" />
+                </div>
+                <div class="fields">
+                    <button @click="submit">Submit</button>
+                </div>
+                <div class="message">
+                    <h5>{{ message }}</h5>
+                </div>
+            </form>
+        </div>
+        <button @click="handleShowImage">xem ảnh</button>
+        <img :src="imageUrl" alt="chưa có gì hết chơn">
     </div>
-    <button @click="handleShowImage">xem ảnh</button>
-    <img :src="imageUrl" alt="chưa có gì hết chơn">
 </template>
 
 <script>

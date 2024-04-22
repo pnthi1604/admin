@@ -7,7 +7,7 @@ class AuthService {
 
     async login(user) {
         try {
-            const data = (await this.api.post("/login", user)).data
+            const data = (await this.api.post("login", user)).data
             return {
                 status: "success",
                 message: data.message || "User logged in successfully",
@@ -23,7 +23,7 @@ class AuthService {
     
     async register(user) {
         try {
-            const data = (await this.api.post("/register", user)).data
+            const data = (await this.api.post("register", user)).data
             return {
                 status: "success",
                 message: data.message || "User registered successfully",
@@ -39,7 +39,7 @@ class AuthService {
 
     async logout() {
         try {
-            const data = (await this.api.post("/logout")).data
+            const data = (await this.api.post("logout")).data
             return {
                 status: "success",
                 message: data.message || "User logged out successfully",

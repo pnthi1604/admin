@@ -25,10 +25,17 @@ export default {
             }
         }
     },
-    created() {
-        if (this.$route?.params?.id) {
+    beforeMount: async function() {
+        const id = this.$route?.params?.id
+        if (id) {
             this.title = "Cập nhật nhà xuất bản"
-            this.publisher = {...this.$route.query} || this.publisher
+            const res = await publisherService.getPublisherById(id);
+            if (res.status == "error") {
+                alert(res.message);
+                return;
+            } else {
+                this.publisher = res.data;
+            }
         }
     },
     methods: {

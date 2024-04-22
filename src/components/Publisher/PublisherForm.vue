@@ -27,6 +27,7 @@ export default {
     props: {
         publisher: {
             type: Object,
+            default: null,
         }
     },
     data() {
@@ -39,17 +40,22 @@ export default {
     components: {
         Btn,
     },
-    created() {
-        if (this.publisher) {
-            this.name = this.publisher.name;
-            this.email = this.publisher.email;
-            this.address = this.publisher.address;
-            if (this.publisher._id) {
-                this._id = this.publisher._id;
-            }
+    watch: {
+        publisher(newVal, oldVal) {
+            this.formData(newVal);
         }
     },
     methods: {
+        formData(publisher) {
+            if (publisher) {
+                this.name = publisher.name;
+                this.email = publisher.email;
+                this.address = publisher.address;
+                if (publisher._id) {
+                    this._id = publisher._id;
+                }
+            }
+        },
         async handleSubmit(evnet) {
             evnet.preventDefault();
             const data = {
