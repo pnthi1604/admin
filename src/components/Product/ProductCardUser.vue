@@ -59,8 +59,6 @@ export default {
 }
 
 .product-image {
-    width: 100%;
-    height: 60%;
     border-radius: 5px;
 }
 
@@ -71,7 +69,7 @@ export default {
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
-    height: 10%;
+    min-height: 50px;
 }
 
 .btn-add:hover {

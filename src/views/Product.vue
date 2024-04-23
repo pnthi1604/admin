@@ -80,6 +80,8 @@ export default {
                 return
             }
             this.products = res.data;
+            // reverse this.products
+            this.products = this.products.reverse();
             this.filterProducts = this.products;
         },
         addProduct() {
