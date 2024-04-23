@@ -15,7 +15,7 @@
         <td class="func">
             <btn nameBtn="Xem" styleBtn="btn-primary" @click="handleShowDetail" class="btn-func"></btn>
             <btn v-if="['Đang xử lý', 'Đang giao hàng'].includes(status)" nameBtn="Xác nhận" styleBtn="btn-warning" @click="handleConfirm" class="btn-func"></btn>
-            <btn v-if="!(['Đã hủy', 'Đã nhận hàng'].includes(status))" nameBtn="Hủy đơn" styleBtn="btn-danger" @click="handleCancel" class="btn-func"></btn>
+            <btn v-if="['Đang xử lý'].includes(status)" nameBtn="Hủy đơn" styleBtn="btn-danger" @click="handleCancel" class="btn-func"></btn>
             <btn v-if="status == 'Yêu cầu hủy đơn'" nameBtn="Từ chối" styleBtn="btn-warning" @click="handleConfirm" class="btn-func"></btn>
         </td>
     </tr>
