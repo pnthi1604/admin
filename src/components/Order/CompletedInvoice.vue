@@ -47,7 +47,7 @@
         <tbody>
             <completed-invoice-item v-for="orderItem in orderItems" :key="orderItem._id" :orderItem="orderItem" @showDetail="handleShowDetail"></completed-invoice-item>
             <tr>
-                <td colspan="5">
+                <td colspan="4">
                     <p class="total-value">
                         Tổng thanh toán
                     </p>
