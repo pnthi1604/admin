@@ -29,6 +29,7 @@ export default {
             default: "guest"
         }
     },
+    emits: ['login', 'logout'],
     data() {
         return {
             guestRole: "guest",

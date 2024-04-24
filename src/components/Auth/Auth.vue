@@ -65,6 +65,7 @@ export default {
             default: 'Login'
         }
     },
+    emits: ['submit'],
     data() {
         return {
             lastName: '',

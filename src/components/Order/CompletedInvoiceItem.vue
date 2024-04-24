@@ -8,8 +8,9 @@
                 </p>
             </div>
         </td>
-        <td>{{ returnDate ? returnDate : "Đang cập nhật" }}</td>
-        <td>{{ borrowDate ? borrowDate : "Đang cập nhật" }}</td>
+        <!-- <td>{{ borrowDate ? borrowDate : "Đang cập nhật" }}</td> -->
+        <!-- <td>{{ returnDate ? returnDate : "Đang cập nhật" }}</td> -->
+        <td>{{ orderItem.borrowingTime }}</td>
         <td>{{ orderItem.quantity }}</td>
         <td>{{ orderItem.price }}</td>
         <td>{{ orderItem.quantity * orderItem.price }}</td>
@@ -32,20 +33,24 @@ export default {
             default: null,
         },
     },
-    beforeMount() {
-        this.returnDate = this.convertFormDate(this.orderItem.returnDate);
-        this.borrowDate = this.convertFormDate(this.orderItem.borrowDate);
-    },
+    emits: ['showDetail'],
     data() {
         return {
             returnDate: null,
             borrowDate: null,
         }
     },
+    beforeMount() {
+        // this.returnDate = this.convertFormDate(this.orderItem.returnDate);
+        // this.borrowDate = this.convertFormDate(this.orderItem.borrowDate);
+        console.log({
+            orderItem: this.orderItem
+        })
+    },
     methods: {
         shortForm(text, maxLength) {
             if (!text)
-                return null
+                return ""
             if (!maxLength)
                 maxLength = 1000
             if (text.length > maxLength) {

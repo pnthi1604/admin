@@ -14,6 +14,7 @@ export default {
             default: 'btn-primary'
         }
     },
+    emits: ['submit'],
     methods: {
         handleSubmit(event) {
             this.$emit('submit', event);

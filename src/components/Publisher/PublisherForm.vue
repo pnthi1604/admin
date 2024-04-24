@@ -30,6 +30,7 @@ export default {
             default: null,
         }
     },
+    emits: ['submit'],
     data() {
         return {
             name: "Tên nhà xuất bản",

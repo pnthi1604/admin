@@ -13,6 +13,7 @@ export default {
             default: 'Tìm kiếm'
         }
     },
+    emits: ['search'],
     data() {
         return {
             searchTerm: ''

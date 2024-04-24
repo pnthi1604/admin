@@ -1,18 +1,18 @@
 <template>
     <div class="product-detail">
         <div class="product-item">
-            <img :src="product.imageId.imageUrl" alt="product.name" class="product-image" />
+            <img v-lazy="product?.imageId?.imageUrl || ''" alt="product.name" class="product-image" />
             <div class="product-info">
-                <h4 class="product-name">{{ shortForm(product.name) }}</h4>
-                <p class="attribute-product">Giá: <span class="font-weight-bold">{{ shortForm(product.price) }}đ</span>
+                <h4 class="product-name">{{ product?.name }}</h4>
+                <p class="attribute-product">Giá: <span class="font-weight-bold">{{ product?.price }}đ</span>
                 </p>
-                <p class="attribute-product">Số lượng: {{ shortForm(product.quantity) }}</p>
-                <p class="attribute-product">Tác giả: {{ shortForm(product.author) }}</p>
+                <p class="attribute-product">Số lượng: {{ product?.quantity }}</p>
+                <p class="attribute-product">Tác giả: {{ product?.author }}</p>
                 <p class="attribute-product">Thời hạn mượn: <span class="font-weight-bold">{{
-                shortForm(product.borrowingTime) }} ngày</span></p>
-                <p class="attribute-product">Mô tả: {{ shortForm(product.description) }}</p>
-                <p class="attribute-product">Nhà xuất bản: {{ shortForm(product.publisherId.name) }}</p>
-                <p class="attribute-product">Năm xuất bản: {{ shortForm(product.publishYear) }}</p>
+                product?.borrowingTime }} ngày</span></p>
+                <p class="attribute-product">Mô tả: {{ product?.description }}</p>
+                <p class="attribute-product">Nhà xuất bản: {{ product?.publisherId?.name }}</p>
+                <p class="attribute-product">Năm xuất bản: {{ product?.publishYear }}</p>
             </div>
         </div>
     </div>
@@ -27,16 +27,6 @@ export default {
         }
     },
     methods: {
-        shortForm(text, maxLength) {
-            if (!text)
-                return ""
-            if (!maxLength)
-                maxLength = 1000
-            if (text.length > maxLength) {
-                return text.substring(0, maxLength) + '...';
-            }
-            return text;
-        }
     }
 };
 </script>

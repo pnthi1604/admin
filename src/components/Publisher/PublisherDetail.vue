@@ -2,10 +2,10 @@
     <div class="list-item">
         <div class="item">
             <div class="item-info">
-                <h4 class="item-name">{{ shortForm(item.name) }}</h4>
+                <h4 class="item-name">{{ item.name }}</h4>
                 <p class="item-attribute">ID: {{ item._id }}</p>
                 <p class="item-attribute">Email: {{ item.email }}</p>
-                <p class="item-attribute">Address: {{ shortForm(item.address) }}</p>
+                <p class="item-attribute">Address: {{ item.address }}</p>
             </div>
             <div class="btn-func">
                 <btn nameBtn="Sửa" styleBtn="btn-warning" @click="handleUpdate" class="btn-item"></btn>
@@ -28,15 +28,8 @@ export default {
             required: true
         }
     },
+    emits: ['update', 'delete'],
     methods: {
-        shortForm(text, maxLength) {
-            if (!maxLength)
-                maxLength = 1000
-            if (text.length > maxLength) {
-                return text.substring(0, maxLength) + '...';
-            }
-            return text;
-        },
         handleUpdate() {
             this.$emit('update', this.item);
         },

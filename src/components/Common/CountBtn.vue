@@ -17,6 +17,7 @@ export default {
             type: Number,
         }
     },
+    emits: ['increment', 'decrement'],
     data() {
         return {
             counter: 0

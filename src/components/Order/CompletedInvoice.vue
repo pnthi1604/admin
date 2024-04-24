@@ -7,7 +7,7 @@
                         Sản phẩm
                     </p>
                 </th>
-                <th scope="col">
+                <!-- <th scope="col">
                     <p>
                         Ngày mượn
                     </p>
@@ -15,6 +15,11 @@
                 <th scope="col">
                     <p>
                         Ngày trả
+                    </p>
+                </th> -->
+                <th scope="col">
+                    <p>
+                        Hạn mượn
                     </p>
                 </th>
                 <th scope="col">
@@ -70,9 +75,9 @@ export default {
             required: true,
         }
     },
+    emits: ['showDetail'],
     data() {
         return {
-            totalValue: 0,
         }
     },
     computed: {
@@ -81,11 +86,6 @@ export default {
                 return total + orderItem.quantity * orderItem.price;
             }, 0);
         }
-    },
-    beforeMount() {
-        console.log({
-            order_item_in_invoice: this.orderItems
-        });
     },
     methods: {
         handleShowDetail(orderItem) {

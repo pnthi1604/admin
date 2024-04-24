@@ -13,7 +13,6 @@
 
 <script>
 export default {
-    name: 'ProductCard',
     props: {
         product: {
             type: Object,

@@ -64,6 +64,7 @@ export default {
             default: null,
         }
     },
+    emits: ['submit'],
     data() {
         return {
             _id: null,

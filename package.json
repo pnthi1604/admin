@@ -17,7 +17,9 @@
     "pinia": "^2.1.7",
     "popper.js": "^1.16.1",
     "vue": "^3.3.11",
-    "vue-router": "^4.3.0"
+    "vue-lazyload": "^3.0.0",
+    "vue-router": "^4.3.0",
+    "vue3-lazyload": "^0.3.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

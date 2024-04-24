@@ -20,7 +20,7 @@ export default {
         ProductDetail,
         Btn,
     },
-    beforeMount: async function() {
+    created: async function() {
         const res = await productService.getProductById(this.$route.params.id);
         if (res.status == "success")
             this.product = res.data;
@@ -31,7 +31,7 @@ export default {
     data() {
         return {
             title: 'Chi tiết sản phẩm',
-            product: ""
+            product: {},
         }
     },
     methods: {

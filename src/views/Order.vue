@@ -16,8 +16,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <order-item v-for="order in filterOrders" :key="order.__uniqueKey" :order="order"
+                    <!-- <order-item v-for="order in filterOrders" :key="order.__uniqueKey" :order="order"
                         @showDetail="handleShowDetail" @cancel="handleCancel" @confirm="handleConfirm">
+                    </order-item> -->
+                    <order-item v-for="order in filterOrders" :key="order.__uniqueKey" :order="order"
+                        @showDetail="handleShowDetail" @update:order="handleUpdate">
                     </order-item>
                 </tbody>
             </table>
@@ -36,11 +39,27 @@ import InputSearch from "@/components/Common/InputSearch.vue";
 export default {
     computed: {
         ...mapStores(useAuthStore),
+        filterOrders() {
+            let filterOrders = [];
+            if (!this.searchTerm || this.searchTerm == "")
+                filterOrders = this.orders;
+            else
+                filterOrders = this.orders.filter(order => {
+                    return order.orderStatuses[order.orderStatuses.length - 1].title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        order.phone.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        order.fullname.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        order.address.toLowerCase().includes(this.searchTerm.toLowerCase())
+                });
+            filterOrders = filterOrders.map(order => {
+                order.__uniqueKey = new Date()
+                return order
+            })
+            return filterOrders;
+        },
     },
     data() {
         return {
             orders: [],
-            filterOrders: [],
             title: 'Đơn hàng',
             searchBy: "Tìm kiếm theo trạng thái đơn hàng, số điện thoại khách hàng, tên khách hàng, địa chỉ",
             searchTerm: "",
@@ -57,27 +76,9 @@ export default {
     methods: {
         handleSearch(searchTerm) {
             this.searchTerm = searchTerm
-            this.filter()
-        },
-        filter() {
-            if (!this.searchTerm || this.searchTerm == "")
-                this.filterOrders = this.orders;
-            else
-                this.filterOrders = this.orders.filter(order => {
-                    order.__uniqueKey = new Date()
-                    return order.orderStatuses[order.orderStatuses.length - 1].title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                        order.phone.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                        order.fullname.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                        order.address.toLowerCase().includes(this.searchTerm.toLowerCase())
-                });
-            this.filterOrders = this.filterOrders.map(order => {
-                order.__uniqueKey = new Date()
-                return order
-            })
         },
         async reset() {
             await this.getOrders()
-            this.filter()
         },
         async getOrders() {
             const userId = this.authStore.getUser._id;
@@ -95,7 +96,7 @@ export default {
                     this.orders[i].index = i + 1;
                 }
                 this.orders = res.data;
-                this.filterOrders = this.orders
+                // this.filterOrders = this.orders
             } else {
                 alert(res.message);
             }
@@ -108,65 +109,24 @@ export default {
                 },
             });
         },
-        async handleCancel(order) {
-            if (window.confirm("Bạn có chắc chắn hủy đơn hàng này")) {
-                const adminId = this.authStore.getUser._id;
-                const res = await orderService.updateOrder({
-                    orderId: order._id,
-                    orderStatus: {
-                        title: "Đã hủy",
-                    },
-                    adminId,
-                })
-                if (res.status == "error")
-                    alert(res.message)
-                else {
-                    this.orders = this.orders.map((item) => {
-                        if (item._id == order._id) {
-                            console.log({ item })
-                            item.orderStatuses.push(
-                                res.data.orderStatuses[res.data.orderStatuses.length - 1]
-                            );
-                            item.__uniqueKey = Date.now();
-                        }
-                        return item;
-                    });
+        async handleUpdate({ order, status }) {
+            if (status == 'Đã hủy') {
+                if (window.confirm("Bạn có chắc chắn hủy đơn hàng này")) {
+                    await this.handleConfirm({ order, status })
                 }
-                await this.reset()
+            } else {
+                await this.handleConfirm({ order, status })
             }
         },
         async handleConfirm({ order, status }) {
             const adminId = this.authStore.getUser._id;
-            let res = null;
-            if (status == "Đang xử lý") {
-                res = await orderService.updateOrder({
-                    adminId,
-                    orderId: order._id,
-                    orderStatus: {
-                        title: "Đang giao hàng",
-                    },
-                })
-            } else if (status == "Đang giao hàng") {
-                res = await orderService.updateOrder({
-                    orderId: order._id,
-                    orderStatus: {
-                        title: "Đã nhận hàng",
-                    },
-                    adminId,
-                })
-            } else if (status == "Yêu cầu hủy đơn") {
-                if (window.confirm("Bạn có chắc chắn từ chối yêu cầu hủy đơn này")) {
-                    res = await orderService.updateOrder({
-                        orderId: order._id,
-                        orderStatus: {
-                            title: "Đang giao hàng",
-                        },
-                        adminId,
-                    })
-                }
-            }
-            if (res == null)
-                return
+            let res = await orderService.updateOrder({
+                orderId: order._id,
+                orderStatus: {
+                    title: status,
+                },
+                adminId,
+            })
             if (res.status == "error")
                 alert(res.message)
             else {

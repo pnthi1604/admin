@@ -15,7 +15,7 @@
         <td class="func">
             <btn nameBtn="Xem" styleBtn="btn-primary" @click="handleShowDetail" class="btn-func"></btn>
             <btn v-if="['Đang xử lý', 'Đang giao hàng'].includes(status)" nameBtn="Xác nhận" styleBtn="btn-warning" @click="handleConfirm" class="btn-func"></btn>
-            <btn v-if="['Đang xử lý'].includes(status)" nameBtn="Hủy đơn" styleBtn="btn-danger" @click="handleCancel" class="btn-func"></btn>
+            <btn v-if="['Đang xử lý', 'Yêu cầu hủy đơn'].includes(status)" nameBtn="Hủy đơn" styleBtn="btn-danger" @click="handleCancel" class="btn-func"></btn>
             <btn v-if="status == 'Yêu cầu hủy đơn'" nameBtn="Từ chối" styleBtn="btn-warning" @click="handleConfirm" class="btn-func"></btn>
         </td>
     </tr>
@@ -26,27 +26,34 @@ import Btn from "@/components/Common/Btn.vue"
 import CountBtn from '../Common/CountBtn.vue';
 
 export default {
+    computed: {
+        totalPrice() {
+            let total = 0
+            this.order.orderItemsId.forEach(item => {
+                total += item.price * item.quantity
+            })
+            return total
+        }
+    },
     props: {
         order: {
             type: Object,
             required: true
         }
     },
-    emits: ['showDetail', 'cancel', 'confirm', 'refuse'],
     components: {
         Btn,
         CountBtn,
     },
     data() {
         return {
-            totalPrice: 0,
             status: 'Đang chờ xử lý'
         }
     },
     created() {
-        this.totalPrice = this.getTotalPrice()
         this.status = this.getStatus()
     },
+    emits: ['showDetail', 'update:order'],
     methods: {
         shortForm(text, maxLength) {
             if (!maxLength)
@@ -55,13 +62,6 @@ export default {
                 return text.substring(0, maxLength) + '...';
             }
             return text;
-        },
-        getTotalPrice() {
-            let total = 0
-            this.order.orderItemsId.forEach(item => {
-                total += item.price * item.quantity
-            })
-            return total
         },
         getStatus() {
             // get last status
@@ -72,12 +72,23 @@ export default {
             this.$emit('showDetail', this.order)
         },
         handleCancel() {
-            this.$emit('cancel', this.order)
+            this.$emit('update:order', {
+                status: "Đã hủy",
+                order: this.order,
+            })
         },
         handleConfirm() {
-            this.$emit('confirm', {
+            let status = ""
+            if (this.status == "Đang xử lý") {
+                status = "Đang giao hàng"
+            } else if (this.status == "Đang giao hàng") {
+                status = "Đã nhận hàng"
+            } else if (this.status == "Yêu cầu hủy đơn") {
+                status = "Đang giao hàng"
+            }
+            this.$emit('update:order', {
                 order: this.order,
-                status: this.status,
+                status,
             })
         },
     }

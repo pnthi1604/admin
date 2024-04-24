@@ -40,6 +40,7 @@ export default {
             required: true
         }
     },
+    emits: ['deleteProduct', 'showDetail'],
     components: {
         Btn,
     },
