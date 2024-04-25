@@ -36,9 +36,6 @@ export default {
     beforeMount: async function() {
         const id = this.$route.params.id;
         const res = await orderService.getOrder(id);
-        console.log({
-            res_order: res.data
-        })
         if (res.status == "error") {
             alert(res.message);
             this.$router.push({

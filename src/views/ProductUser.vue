@@ -47,9 +47,6 @@ export default {
             } else {
                 this.products = this.productStore.getProducts
             }
-            console.log({
-                "products": this.products
-            })
         },
         addProduct() {
             this.$router.push({ name: 'addProductPage' });

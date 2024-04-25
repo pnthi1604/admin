@@ -37,7 +37,6 @@ export default {
     methods: {
         async handleSubmit(data) {
             const { file, ...productData } = data;
-            console.log({file})
             if (file) {
                 const formData = new FormData();
                 formData.append("file", file);
@@ -56,7 +55,6 @@ export default {
 
             let resProduct = null
             if (!this.$route.params.id) {
-                console.log({productData})  
                 resProduct = await productService.createProduct(productData)
             } else {
                 resProduct = await productService.updateProduct(this.$route.params.id, productData)

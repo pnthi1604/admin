@@ -56,7 +56,6 @@ export default {
 
 <style>
 .container {
-    width: 80%;
     margin: 0 auto;
     margin-top: 12px;
     min-height: 1000px;

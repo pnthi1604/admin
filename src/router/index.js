@@ -2,10 +2,16 @@ import { createWebHistory, createRouter } from "vue-router";
 import authRoutes from "./authRoutes.js";
 import useAuthStore from "@/stores/auth.store.js";
 import adminRoutes from "./adminRoutes.js";
+import NotFound from "@/views/NotFound.vue";
 
 const routes = [
     ...authRoutes,
     ...adminRoutes,
+    {
+        path: "/:pathMatch(.*)*",
+        name: "notfound",
+        component: NotFound,
+    },
 ]
 
 const router = createRouter({

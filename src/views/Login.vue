@@ -27,9 +27,6 @@ export default {
         async handleSubmit(data) {
             const res = await authService.login(data);
             if (res.status == "success") {
-                console.log({
-                    "admin data": res.data,
-                })
                 const responseGetEmployee = await employeeService.getEmployeeById(res.data.id)
                 if (responseGetEmployee.status == "error") {
                     alert(responseGetEmployee.message)

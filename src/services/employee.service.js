@@ -8,9 +8,6 @@ class EmployeeService {
     async getEmployeeById(id) {
         try {
             const data = (await this.api.get(`/${id}`)).data
-            console.log({
-                "data get admin api": data
-            })
             return {
                 status: "success",
                 data: data.data,
