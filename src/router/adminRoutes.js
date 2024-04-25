@@ -2,17 +2,12 @@ import Home from "@/views/Home.vue";
 import Product from "@/views/Product.vue";
 import Publisher from "@/views/Publisher.vue";
 import UpdateProduct from "@/views/UpdateProduct.vue";
-import Upload from "@/views/Upload.vue";
 import ProductDetail from "@/views/ProductDetail.vue";
 import UpdatePublisher from "@/views/UpdatePublisher.vue";
 import Order from "@/views/Order.vue";
 import OrderDatail from "@/views/OrderDetail.vue";
 
 const routes = [
-    {
-        path: "/upload",
-        component: Upload,
-    },
     {
         path: "/",
         redirect: "/admin",
